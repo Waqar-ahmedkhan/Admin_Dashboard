@@ -1,15 +1,19 @@
 "use client";
-import React from 'react';
-import Sidebar from './Sidebar';
+import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar />
+      {/* Sidebar */}
+      <Sidebar
+        isOpen={isSidebarOpen}
+        toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
+
+      {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto">
         {children}
       </main>
