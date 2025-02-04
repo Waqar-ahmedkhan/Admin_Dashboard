@@ -8,6 +8,15 @@ import YearlyUserChart from "../components/YearlyUserChart";
 import PremiumUsers from "../components/PremiumUsers";
 import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
+import UsersByCountryChart from "../components/UserByCountryChart";
+
+
+
+interface UsersByCountry {
+  country: string;
+  users: number;
+}
+
 
 interface MonthlyUserData {
   month: string;
@@ -100,6 +109,10 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
+
+
+  
+
   // Sample data for recently contacted users
   const recentlyContactedUsers: ContactedUser[] = [
     {
@@ -132,10 +145,10 @@ const DashboardPage: React.FC = () => {
       </div>
 
       <MonthlyUserChart data={monthlyUserData} />
+      <RecentlyContactedUsers users={recentlyContactedUsers} />
       <YearlyUserChart data={yearlyUserData} />
       <PremiumUsers users={premiumUsers} />
       <RecentUsers users={recentUsers} />
-      <RecentlyContactedUsers users={recentlyContactedUsers} />
     </DashboardLayout>
   );
 };
