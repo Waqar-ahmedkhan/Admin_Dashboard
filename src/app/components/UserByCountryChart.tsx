@@ -7,22 +7,7 @@ interface UsersByCountryProps {
 }
 
 const UsersByCountryChart: React.FC<UsersByCountryProps> = ({ data, timeFrame }) => {
-  // Determine the correct dataKey based on the timeFrame
-  const getXAxisDataKey = (): "" | "date" | "month" | "year" => {
-    switch (timeFrame) {
-      case "daily":
-        return "date";
-      case "monthly":
-        return "month";
-      case "yearly":
-        return "year";
-      default:
-        return "";
-    }
-  };
-
-  // Use the getXAxisDataKey function to dynamically assign the dataKey for XAxis
-  const xAxisDataKey = getXAxisDataKey();
+  // Determine the XAxis dataKey based on the timeFrame
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
@@ -31,7 +16,7 @@ const UsersByCountryChart: React.FC<UsersByCountryProps> = ({ data, timeFrame })
       </h2>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} layout="vertical">
-          <XAxis type="number" dataKey={xAxisDataKey} />
+          <XAxis type="number" />
           <YAxis type="category" dataKey="country" width={100} />
           <Tooltip />
           <Legend />

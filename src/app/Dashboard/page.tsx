@@ -1,6 +1,5 @@
-// pages/DashboardPage.tsx
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Card from "../components/Card";
 import DashboardLayout from "../components/DashboardLayout";
 import MonthlyUserChart from "../components/MonthlyUserChart";
@@ -10,13 +9,10 @@ import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
 import UsersByCountryChart from "../components/UserByCountryChart";
 
-
-
 interface UsersByCountry {
   country: string;
   users: number;
 }
-
 
 interface MonthlyUserData {
   month: string;
@@ -51,7 +47,8 @@ interface ContactedUser {
 }
 
 const DashboardPage: React.FC = () => {
-  // Sample data for monthly and yearly users
+  const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">("daily");
+
   const monthlyUserData: MonthlyUserData[] = [
     { month: "Jan", users: 10 },
     { month: "Feb", users: 20 },
@@ -75,7 +72,6 @@ const DashboardPage: React.FC = () => {
     { year: "2024", users: 1300 },
   ];
 
-  // Sample data for premium users
   const premiumUsers: PremiumUser[] = [
     {
       id: 1,
@@ -93,7 +89,6 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-  // Sample data for recent users
   const recentUsers: RecentUser[] = [
     {
       id: 1,
@@ -109,11 +104,6 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-
-
-  
-
-  // Sample data for recently contacted users
   const recentlyContactedUsers: ContactedUser[] = [
     {
       id: 1,
@@ -129,24 +119,39 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
+  const dailyUsersByCountry: UsersByCountry[] = [
+    { country: "United States", users: 15 },
+    { country: "India", users: 18 },
+    { country: "United Kingdom", users: 12 },
+  ];
+
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        <Card title="TODAY USERS" value="1" />
-        <Card title="TOTAL USERS" value="161" />
-        <Card title="VIP USERS" value="3" />
-        <Card title="TODAY USERS" value="1" />
-        <Card title="TOTAL USERS" value="161" />
-        <Card title="VIP USERS" value="3" />
-        <Card title="TODAY USERS" value="1" />
-        <Card title="TOTAL USERS" value="161" />
-        <Card title="VIP USERS" value="3" />
+
+      <div className="mb-4">
+        <label className="mr-2">Select Time Frame:</label>
+        <select value={timeFrame} onChange={(e) => setTimeFrame(e.target.value as never)} className="p-2 border rounded">
+          <option value="daily">Daily</option>
+          <option value="monthly">Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {[
+          { title: "TODAY USERS", value: "1" },
+          { title: "TOTAL USERS", value: "161" },
+          { title: "VIP USERS", value: "3" },
+        ].map((card, index) => (
+          <Card key={index} title={card.title} value={card.value} />
+        ))}
+      </div>
+
+      <UsersByCountryChart data={dailyUsersByCountry} timeFrame={timeFrame} />
       <MonthlyUserChart data={monthlyUserData} />
-      <RecentlyContactedUsers users={recentlyContactedUsers} />
       <YearlyUserChart data={yearlyUserData} />
+      <RecentlyContactedUsers users={recentlyContactedUsers} />
       <PremiumUsers users={premiumUsers} />
       <RecentUsers users={recentUsers} />
     </DashboardLayout>
