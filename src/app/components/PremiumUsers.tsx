@@ -1,6 +1,5 @@
-// components/PremiumUsers.tsx
 "use client";
-import React from 'react';
+import React from "react";
 
 interface PremiumUser {
   id: number;
@@ -17,24 +16,27 @@ interface PremiumUsersProps {
 const PremiumUsers: React.FC<PremiumUsersProps> = ({ users }) => {
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">Premium Users</h2>
-      <div className="bg-white p-4 rounded-lg shadow-md overflow-x-auto">
-        <table className="w-full min-w-[600px] sm:min-w-0">
-          <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="text-left p-2">Name</th>
-              <th className="text-left p-2">Email</th>
-              <th className="text-left p-2">Subscription Date</th>
-              <th className="text-left p-2">Plan</th>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Premium Users</h2>
+      <div className="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Name</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Email</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Subscription Date</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Plan</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-b hover:bg-gray-50">
-                <td className="p-2 whitespace-nowrap">{user.name}</td>
-                <td className="p-2 whitespace-nowrap">{user.email}</td>
-                <td className="p-2 whitespace-nowrap">{user.subscriptionDate}</td>
-                <td className="p-2 whitespace-nowrap">{user.plan}</td>
+              <tr
+                key={user.id}
+                className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              >
+                <td className="p-4 text-sm text-gray-700">{user.name}</td>
+                <td className="p-4 text-sm text-gray-700">{user.email}</td>
+                <td className="p-4 text-sm text-gray-700">{user.subscriptionDate}</td>
+                <td className="p-4 text-sm text-gray-700">{user.plan}</td>
               </tr>
             ))}
           </tbody>

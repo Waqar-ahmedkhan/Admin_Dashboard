@@ -1,5 +1,5 @@
-// components/RecentUsers.tsx
-import React from 'react';
+"use client";
+import React from "react";
 
 interface RecentUser {
   id: number;
@@ -15,22 +15,25 @@ interface RecentUsersProps {
 const RecentUsers: React.FC<RecentUsersProps> = ({ users }) => {
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">Recent Users</h2>
-      <div className="bg-white p-4 rounded-lg shadow-md">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Recent Users</h2>
+      <div className="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden">
         <table className="w-full">
-          <thead>
-            <tr className="border-b">
-              <th className="text-left p-2">Name</th>
-              <th className="text-left p-2">Email</th>
-              <th className="text-left p-2">Signup Date</th>
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Name</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Email</th>
+              <th className="text-left p-4 text-sm font-medium text-gray-600">Signup Date</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-b">
-                <td className="p-2">{user.name}</td>
-                <td className="p-2">{user.email}</td>
-                <td className="p-2">{user.signupDate}</td>
+              <tr
+                key={user.id}
+                className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+              >
+                <td className="p-4 text-sm text-gray-700">{user.name}</td>
+                <td className="p-4 text-sm text-gray-700">{user.email}</td>
+                <td className="p-4 text-sm text-gray-700">{user.signupDate}</td>
               </tr>
             ))}
           </tbody>

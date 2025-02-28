@@ -9,6 +9,7 @@ import PremiumUsers from "../components/PremiumUsers";
 import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
 import UsersByCountryChart from "../components/UserByCountryChart";
+import { Users, Star, DollarSign, CreditCard, Receipt } from "lucide-react";
 
 interface UsersByCountry {
   country: string;
@@ -126,15 +127,27 @@ const DashboardPage: React.FC = () => {
     { country: "United Kingdom", users: 12 },
   ];
 
+  // Stats cards data with icons, matching the image description
+  const statsCards = [
+    { title: "TODAY USERS", value: "1", icon: Users },
+    { title: "TOTAL USERS", value: "228", icon: Users },
+    { title: "VIP USERS", value: "6", icon: Star },
+    { title: "TOTAL INCOME", value: "IND 0.0", icon: DollarSign },
+    { title: "TOTAL PAYMENT", value: "IND 0.0", icon: CreditCard },
+    { title: "WEEKLY PAYMENT", value: "IND 0.0", icon: CreditCard },
+    { title: "MONTHLY PAYMENT", value: "IND 1.4K", icon: CreditCard },
+    { title: "TOTAL TRANSACTION", value: "IND 0.0", icon: Receipt },
+  ];
+
   return (
     <DashboardLayout>
-      <div className="p-6">
+      <div className="p-6 bg-gray-100 min-h-screen">
         <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
         {/* Time Frame Selector */}
         <div className="mb-6">
           <Select value={timeFrame} onValueChange={(value) => setTimeFrame(value as "daily" | "monthly" | "yearly")}>
-            <SelectTrigger className="w-36">
+            <SelectTrigger className="w-36 bg-white border-gray-300">
               <SelectValue placeholder="Select Time Frame" />
             </SelectTrigger>
             <SelectContent>
@@ -146,18 +159,15 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
-          {[
-            { title: "TODAY USERS", value: "1" },
-            { title: "TOTAL USERS", value: "161" },
-            { title: "VIP USERS", value: "3" },
-          ].map((card, index) => (
-            <Card key={index}>
-              <CardHeader>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+          {statsCards.map((card, index) => (
+            <Card key={index} className="bg-white p-4 rounded-lg shadow-md">
+              <CardHeader className="flex items-center space-x-2 p-0">
+                <card.icon className="h-4 w-4 text-gray-500" />
                 <CardTitle className="text-sm font-medium text-gray-500">{card.title}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold">{card.value}</p>
+              <CardContent className="p-0 pt-2">
+                <p className="text-2xl font-bold text-black text-center">{card.value}</p>
               </CardContent>
             </Card>
           ))}
@@ -165,7 +175,7 @@ const DashboardPage: React.FC = () => {
 
         {/* Charts and Tables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Users by Country</CardTitle>
             </CardHeader>
@@ -174,7 +184,7 @@ const DashboardPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Monthly User Growth</CardTitle>
             </CardHeader>
@@ -183,7 +193,7 @@ const DashboardPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Yearly User Growth</CardTitle>
             </CardHeader>
@@ -192,7 +202,7 @@ const DashboardPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Recently Contacted Users</CardTitle>
             </CardHeader>
@@ -201,7 +211,7 @@ const DashboardPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Premium Users</CardTitle>
             </CardHeader>
@@ -210,7 +220,7 @@ const DashboardPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white p-4 rounded-lg shadow-md">
             <CardHeader>
               <CardTitle>Recent Users</CardTitle>
             </CardHeader>
