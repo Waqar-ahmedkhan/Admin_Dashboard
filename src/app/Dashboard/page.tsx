@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Card from "../components/Card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import DashboardLayout from "../components/DashboardLayout";
 import MonthlyUserChart from "../components/MonthlyUserChart";
 import YearlyUserChart from "../components/YearlyUserChart";
@@ -127,33 +128,98 @@ const DashboardPage: React.FC = () => {
 
   return (
     <DashboardLayout>
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
-      <div className="mb-4">
-        <label className="mr-2">Select Time Frame:</label>
-        <select value={timeFrame} onChange={(e) => setTimeFrame(e.target.value as never)} className="p-2 border rounded">
-          <option value="daily">Daily</option>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
+        {/* Time Frame Selector */}
+        <div className="mb-6">
+          <Select value={timeFrame} onValueChange={(value) => setTimeFrame(value as "daily" | "monthly" | "yearly")}>
+            <SelectTrigger className="w-36">
+              <SelectValue placeholder="Select Time Frame" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="daily">Daily</SelectItem>
+              <SelectItem value="monthly">Monthly</SelectItem>
+              <SelectItem value="yearly">Yearly</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+          {[
+            { title: "TODAY USERS", value: "1" },
+            { title: "TOTAL USERS", value: "161" },
+            { title: "VIP USERS", value: "3" },
+          ].map((card, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <CardTitle className="text-sm font-medium text-gray-500">{card.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold">{card.value}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Charts and Tables */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Users by Country</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <UsersByCountryChart data={dailyUsersByCountry} timeFrame={timeFrame} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Monthly User Growth</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <MonthlyUserChart data={monthlyUserData} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Yearly User Growth</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <YearlyUserChart data={yearlyUserData} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recently Contacted Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RecentlyContactedUsers users={recentlyContactedUsers} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Premium Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <PremiumUsers users={premiumUsers} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RecentUsers users={recentUsers} />
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {[
-          { title: "TODAY USERS", value: "1" },
-          { title: "TOTAL USERS", value: "161" },
-          { title: "VIP USERS", value: "3" },
-        ].map((card, index) => (
-          <Card key={index} title={card.title} value={card.value} />
-        ))}
-      </div>
-
-      <UsersByCountryChart data={dailyUsersByCountry} timeFrame={timeFrame} />
-      <MonthlyUserChart data={monthlyUserData} />
-      <YearlyUserChart data={yearlyUserData} />
-      <RecentlyContactedUsers users={recentlyContactedUsers} />
-      <PremiumUsers users={premiumUsers} />
-      <RecentUsers users={recentUsers} />
     </DashboardLayout>
   );
 };

@@ -6,13 +6,11 @@ import {
   LayoutDashboard,
   Users,
   UserCircle,
-  Video,
   Trash2,
   Flag,
   Star,
   ShoppingCart,
   Bell,
-  Contact,
   Settings,
 } from "lucide-react"; // Icons for menu items
 
@@ -29,13 +27,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
     { name: "Dashboard", icon: <LayoutDashboard size={18} /> },
     { name: "User", icon: <Users size={18} /> },
     { name: "Profiles", icon: <UserCircle size={18} /> },
-    { name: "Live Stream", icon: <Video size={18} /> },
     { name: "User Delete Requests", icon: <Trash2 size={18} /> },
     { name: "Reported User", icon: <Flag size={18} /> },
     { name: "VIP Plans", icon: <Star size={18} /> },
     { name: "Purchase History", icon: <ShoppingCart size={18} /> },
     { name: "Notification", icon: <Bell size={18} /> },
-    { name: "Contact List", icon: <Contact size={18} /> },
     { name: "Setting", icon: <Settings size={18} /> },
   ];
 

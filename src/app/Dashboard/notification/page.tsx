@@ -42,19 +42,25 @@ const NotificationPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-6 flex items-center gap-2 text-blue-600">
-          <FaBell className="text-blue-500" /> Send Notification
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-3 bg-blue-50 rounded-full">
+            <FaBell className="text-blue-600 text-2xl" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800">Send Notification</h1>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Title Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Title</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               placeholder="Enter notification title"
               required
             />
@@ -62,11 +68,11 @@ const NotificationPage = () => {
 
           {/* Message Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Message</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               rows={4}
               placeholder="Write your message here..."
               required
@@ -74,29 +80,36 @@ const NotificationPage = () => {
           </div>
 
           {/* File Upload */}
-          <div className="border border-gray-300 rounded-lg p-4">
-            <label className="block text-sm font-medium text-gray-700 items-center gap-2">
-              <FaImage className="text-blue-500" /> Upload Image (Optional)
-            </label>
+          <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div className="flex items-center gap-2 mb-3">
+              <FaImage className="text-blue-600" />
+              <label className="text-sm font-medium text-gray-700">Upload Image (Optional)</label>
+            </div>
             <input
               type="file"
               onChange={handleFileChange}
-              className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
             {imagePreview && (
-              <div className="mt-3">
-                <Image src={imagePreview} alt="Preview" className="w-full h-40 object-cover rounded-md shadow-md" />
+              <div className="mt-4">
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width={200}
+                  height={150}
+                  className="w-full h-40 object-cover rounded-lg shadow-sm"
+                />
               </div>
             )}
           </div>
 
           {/* Notification Type Dropdown */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Type</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               required
             >
               <option value="">Select Type</option>
@@ -108,15 +121,16 @@ const NotificationPage = () => {
 
           {/* External Link Input */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 items-center gap-2">
-              <FaLink className="text-blue-500" /> External Link (Optional)
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <FaLink className="text-blue-600" />
+              <label className="text-sm font-medium text-gray-700">External Link (Optional)</label>
+            </div>
             <input
               type="url"
               value={externalLink}
               onChange={(e) => setExternalLink(e.target.value)}
               placeholder="https://example.com"
-              className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
             />
           </div>
 
@@ -124,7 +138,7 @@ const NotificationPage = () => {
           <div>
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
+              className="w-full flex items-center justify-center gap-2 py-3 px-6 border border-transparent rounded-lg text-lg font-medium text-white bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
             >
               <FaPaperPlane /> Send Notification
             </button>

@@ -1,4 +1,3 @@
-// components/YearlyUserChart.tsx
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -13,16 +12,30 @@ interface YearlyUserChartProps {
 
 const YearlyUserChart: React.FC<YearlyUserChartProps> = ({ data }) => {
   return (
-    <div className="mt-8">
-      <h2 className="text-xl font-bold mb-4">Yearly User Growth</h2>
+    <div className="bg-white p-6 rounded-xl shadow-md">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Yearly User Growth</h2>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis />
+        <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+          <CartesianGrid stroke="#E5E7EB" strokeDasharray="3 3" />
+          <XAxis
+            dataKey="year"
+            tick={{ fill: '#6B7280' }}
+            axisLine={{ stroke: '#E5E7EB' }}
+            label={{ value: 'Year', position: 'insideBottomRight', offset: 0, fill: '#6B7280' }}
+          />
+          <YAxis
+            tick={{ fill: '#6B7280' }}
+            axisLine={{ stroke: '#E5E7EB' }}
+            label={{ value: 'Number of Users', angle: -90, position: 'insideLeft', fill: '#6B7280' }}
+          />
           <Tooltip />
           <Legend />
-          <Bar dataKey="users" fill="#82ca9d" />
+          <Bar
+            dataKey="users"
+            fill="#6366F1"
+            radius={[4, 4, 0, 0]}
+            label={{ position: 'top', fill: '#4B5563' }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
