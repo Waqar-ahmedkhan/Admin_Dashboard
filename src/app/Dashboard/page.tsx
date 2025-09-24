@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+
+import React, { useState, useMemo } from "react";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import DashboardLayout from "../components/DashboardLayout";
 import MonthlyUserChart from "../components/MonthlyUserChart";
 import YearlyUserChart from "../components/YearlyUserChart";
@@ -9,49 +10,14 @@ import PremiumUsers from "../components/PremiumUsers";
 import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
 import UsersByCountryChart from "../components/UserByCountryChart";
-import { Users, Star, DollarSign, CreditCard, Receipt } from "lucide-react";
-
-interface UsersByCountry {
-  country: string;
-  users: number;
-}
-
-interface MonthlyUserData {
-  month: string;
-  users: number;
-}
-
-interface YearlyUserData {
-  year: string;
-  users: number;
-}
-
-interface PremiumUser {
-  id: number;
-  name: string;
-  email: string;
-  subscriptionDate: string;
-  plan: string;
-}
-
-interface RecentUser {
-  id: number;
-  name: string;
-  email: string;
-  signupDate: string;
-}
-
-interface ContactedUser {
-  id: number;
-  name: string;
-  email: string;
-  lastContacted: string;
-}
+import { TrendingUp, Globe, Users, Clock, Crown, ArrowRight } from "lucide-react";
 
 const DashboardPage: React.FC = () => {
-  const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">("daily");
+  const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">("monthly");
+  const [activeTab, setActiveTab] = useState("overview");
 
-  const monthlyUserData: MonthlyUserData[] = [
+  // Sample data
+  const monthlyUserData = [
     { month: "Jan", users: 10 },
     { month: "Feb", users: 20 },
     { month: "Mar", users: 30 },
@@ -66,7 +32,7 @@ const DashboardPage: React.FC = () => {
     { month: "Dec", users: 120 },
   ];
 
-  const yearlyUserData: YearlyUserData[] = [
+  const yearlyUserData = [
     { year: "2020", users: 500 },
     { year: "2021", users: 700 },
     { year: "2022", users: 900 },
@@ -74,7 +40,7 @@ const DashboardPage: React.FC = () => {
     { year: "2024", users: 1300 },
   ];
 
-  const premiumUsers: PremiumUser[] = [
+  const premiumUsers = [
     {
       id: 1,
       name: "John Doe",
@@ -91,7 +57,7 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-  const recentUsers: RecentUser[] = [
+  const recentUsers = [
     {
       id: 1,
       name: "Alice Johnson",
@@ -106,7 +72,7 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-  const recentlyContactedUsers: ContactedUser[] = [
+  const recentlyContactedUsers = [
     {
       id: 1,
       name: "Charlie Davis",
@@ -121,113 +87,229 @@ const DashboardPage: React.FC = () => {
     },
   ];
 
-  const dailyUsersByCountry: UsersByCountry[] = [
-    { country: "United States", users: 15 },
-    { country: "India", users: 18 },
-    { country: "United Kingdom", users: 12 },
-  ];
-
-  // Stats cards data with icons, matching the image description
-  const statsCards = [
-    { title: "TODAY USERS", value: "1", icon: Users },
-    { title: "TOTAL USERS", value: "228", icon: Users },
-    { title: "VIP USERS", value: "6", icon: Star },
-    { title: "TOTAL INCOME", value: "IND 0.0", icon: DollarSign },
-    { title: "TOTAL PAYMENT", value: "IND 0.0", icon: CreditCard },
-    { title: "WEEKLY PAYMENT", value: "IND 0.0", icon: CreditCard },
-    { title: "MONTHLY PAYMENT", value: "IND 1.4K", icon: CreditCard },
-    { title: "TOTAL TRANSACTION", value: "IND 0.0", icon: Receipt },
-  ];
+  const usersByCountry = useMemo(() => {
+    if (timeFrame === "daily") {
+      return [
+        { country: "United States", users: 15 },
+        { country: "India", users: 18 },
+        { country: "United Kingdom", users: 12 },
+        { country: "Canada", users: 8 },
+        { country: "Australia", users: 7 },
+      ];
+    } else if (timeFrame === "monthly") {
+      return [
+        { country: "United States", users: 150 },
+        { country: "India", users: 180 },
+        { country: "United Kingdom", users: 120 },
+        { country: "Canada", users: 85 },
+        { country: "Australia", users: 65 },
+      ];
+    } else {
+      return [
+        { country: "United States", users: 1800 },
+        { country: "India", users: 2100 },
+        { country: "United Kingdom", users: 1400 },
+        { country: "Canada", users: 1000 },
+        { country: "Australia", users: 800 },
+      ];
+    }
+  }, [timeFrame]);
 
   return (
     <DashboardLayout>
-      <div className="p-6 bg-gray-100 min-h-screen">
-        <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          {/* Header Section - Fully Responsive */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Dashboard Overview</h1>
+            <Select 
+              value={timeFrame} 
+              onValueChange={(value) => setTimeFrame(value as "daily" | "monthly" | "yearly")}
+            >
+              <SelectTrigger className="w-full sm:w-48 bg-white border-gray-200 shadow-sm hover:shadow-md transition-shadow rounded-lg">
+                <SelectValue placeholder="Select Time Frame" />
+              </SelectTrigger>
+              <SelectContent className="rounded-lg shadow-lg">
+                <SelectItem value="daily" className="hover:bg-gray-100 rounded-lg">
+                  Daily
+                </SelectItem>
+                <SelectItem value="monthly" className="hover:bg-gray-100 rounded-lg">
+                  Monthly
+                </SelectItem>
+                <SelectItem value="yearly" className="hover:bg-gray-100 rounded-lg">
+                  Yearly
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        {/* Time Frame Selector */}
-        <div className="mb-6">
-          <Select value={timeFrame} onValueChange={(value) => setTimeFrame(value as "daily" | "monthly" | "yearly")}>
-            <SelectTrigger className="w-36 bg-white border-gray-300">
-              <SelectValue placeholder="Select Time Frame" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="yearly">Yearly</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+          {/* Tabs Navigation - Modern Design */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-1">
+              <TabsTrigger 
+                value="overview" 
+                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
+              >
+                <TrendingUp className="h-4 w-4" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="analytics" 
+                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
+              >
+                <Globe className="h-4 w-4" />
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger 
+                value="users" 
+                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
+              >
+                <Users className="h-4 w-4" />
+                Users
+              </TabsTrigger>
+              <TabsTrigger 
+                value="premium" 
+                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
+              >
+                <Crown className="h-4 w-4" />
+                Premium
+              </TabsTrigger>
+            </TabsList>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-          {statsCards.map((card, index) => (
-            <Card key={index} className="bg-white p-4 rounded-lg shadow-md">
-              <CardHeader className="flex items-center space-x-2 p-0">
-                <card.icon className="h-4 w-4 text-gray-500" />
-                <CardTitle className="text-sm font-medium text-gray-500">{card.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 pt-2">
-                <p className="text-2xl font-bold text-black text-center">{card.value}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+            {/* Overview Tab - Professional Layout */}
+            <TabsContent value="overview" className="mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Users by Country Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Globe className="h-5 w-5 text-blue-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Users by Country</h2>
+                    </div>
+                    <Link 
+                      href="/users-by-country" 
+                      className="text-sm font-medium text-blue-500 hover:text-blue-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="h-[18rem] sm:h-[20rem] p-5">
+                    <UsersByCountryChart data={usersByCountry} timeFrame={timeFrame} />
+                  </div>
+                </div>
 
-        {/* Charts and Tables */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Users by Country</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <UsersByCountryChart data={dailyUsersByCountry} timeFrame={timeFrame} />
-            </CardContent>
-          </Card>
+                {/* Monthly User Growth Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-green-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Monthly User Growth</h2>
+                    </div>
+                    <Link 
+                      href="/monthly-growth" 
+                      className="text-sm font-medium text-green-500 hover:text-green-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="h-[18rem] sm:h-[20rem] p-5">
+                    <MonthlyUserChart data={monthlyUserData} />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
 
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Monthly User Growth</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <MonthlyUserChart data={monthlyUserData} />
-            </CardContent>
-          </Card>
+            {/* Analytics Tab - Clean Layout */}
+            <TabsContent value="analytics" className="mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Yearly User Growth Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5 text-purple-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Yearly User Growth</h2>
+                    </div>
+                    <Link 
+                      href="/yearly-growth" 
+                      className="text-sm font-medium text-purple-500 hover:text-purple-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="h-[18rem] sm:h-[20rem] p-5">
+                    <YearlyUserChart data={yearlyUserData} />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
 
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Yearly User Growth</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <YearlyUserChart data={yearlyUserData} />
-            </CardContent>
-          </Card>
+            {/* Users Tab - Modern Table Layout */}
+            <TabsContent value="users" className="mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Recent Users Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-5 w-5 text-blue-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Recent Users</h2>
+                    </div>
+                    <Link 
+                      href="/recent-users" 
+                      className="text-sm font-medium text-blue-500 hover:text-blue-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="p-5">
+                    <RecentUsers users={recentUsers} />
+                  </div>
+                </div>
 
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Recently Contacted Users</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RecentlyContactedUsers users={recentlyContactedUsers} />
-            </CardContent>
-          </Card>
+                {/* Recently Contacted Users Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-5 w-5 text-green-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Recently Contacted Users</h2>
+                    </div>
+                    <Link 
+                      href="/recently-contacted" 
+                      className="text-sm font-medium text-green-500 hover:text-green-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="p-5">
+                    <RecentlyContactedUsers users={recentlyContactedUsers} />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
 
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Premium Users</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <PremiumUsers users={premiumUsers} />
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white p-4 rounded-lg shadow-md">
-            <CardHeader>
-              <CardTitle>Recent Users</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RecentUsers users={recentUsers} />
-            </CardContent>
-          </Card>
+            {/* Premium Tab - Professional Layout */}
+            <TabsContent value="premium" className="mt-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Premium Users Card */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2">
+                      <Crown className="h-5 w-5 text-yellow-500" />
+                      <h2 className="text-lg font-semibold text-gray-800">Premium Users</h2>
+                    </div>
+                    <Link 
+                      href="/premium-users" 
+                      className="text-sm font-medium text-yellow-500 hover:text-yellow-700 flex items-center gap-1 transition-colors"
+                    >
+                      View all <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                  <div className="p-5">
+                    <PremiumUsers users={premiumUsers} />
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </DashboardLayout>

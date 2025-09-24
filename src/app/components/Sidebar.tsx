@@ -12,7 +12,7 @@ import {
   ShoppingCart,
   Bell,
   Settings,
-} from "lucide-react"; // Icons for menu items
+} from "lucide-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,78 +22,84 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   const pathname = usePathname();
 
-  // Menu items with corresponding icons
   const menuItems = [
-    { name: "Dashboard", icon: <LayoutDashboard size={18} /> },
-    { name: "User", icon: <Users size={18} /> },
-    { name: "Profiles", icon: <UserCircle size={18} /> },
-    { name: "User Delete Requests", icon: <Trash2 size={18} /> },
-    { name: "Reported User", icon: <Flag size={18} /> },
-    { name: "VIP Plans", icon: <Star size={18} /> },
-    { name: "Purchase History", icon: <ShoppingCart size={18} /> },
-    { name: "Notification", icon: <Bell size={18} /> },
-    { name: "Setting", icon: <Settings size={18} /> },
+    { name: "Dashboard", icon: LayoutDashboard, path: "/Dashboard" },
+    { name: "User", icon: Users, path: "/Dashboard/user" },
+    { name: "Profiles", icon: UserCircle, path: "/Dashboard/profiles" },
+    { name: "User Delete Requests", icon: Trash2, path: "/Dashboard/user-delete-requests" },
+    { name: "Reported User", icon: Flag, path: "/Dashboard/reported-user" },
+    { name: "VIP Plans", icon: Star, path: "/Dashboard/vip-plans" },
+    { name: "Purchase History", icon: ShoppingCart, path: "/Dashboard/purchase-history" },
+    { name: "Notification", icon: Bell, path: "/Dashboard/notification" },
+    { name: "Setting", icon: Settings, path: "/Dashboard/setting" },
   ];
 
   return (
     <>
-      {/* Hamburger Icon for Mobile */}
+      {/* Mobile Hamburger Toggle */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-30 md:hidden p-2 bg-gray-800 text-white rounded-md shadow-lg hover:bg-gray-700 transition-colors duration-200"
+        className="fixed top-4 left-4 z-30 md:hidden p-2.5 bg-slate-800 text-white rounded-lg shadow-md hover:bg-slate-700 transition-all duration-200 focus:outline-none"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
       {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-gray-900 to-gray-800 text-white p-6 z-20 transform transition-transform duration-300 ${
+      <aside
+        className={`fixed top-0 left-0 w-64 h-full bg-slate-900 border-r border-slate-700 text-white p-6 z-20 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:static`}
+        } md:translate-x-0 md:static md:shadow-xl`}
       >
-        {/* Brand Logo */}
-        <h1 className="text-2xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
-          MeetHub
+        {/* Brand — Clean, bold, professional */}
+        <h1 className="text-xl font-bold mb-8 text-center text-white tracking-wide">
+          MeetAny
         </h1>
 
-        {/* Menu Items */}
-        <ul className="space-y-1">
-          {menuItems.map((item, index) => {
-            const path =
-              item.name === "Dashboard"
-                ? "/Dashboard"
-                : `/Dashboard/${item.name.toLowerCase().replace(/ /g, "-")}`;
+        {/* Navigation Menu */}
+        <nav>
+          <ul className="space-y-1.5">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.path;
+              const isDashboard = item.name === "Dashboard";
 
-            const isActive =
-              pathname === path ||
-              (item.name === "Dashboard" && pathname === "/Dashboard");
+              return (
+                <li key={item.name}>
+                  <Link
+                    href={item.path}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm transition-all duration-200 group relative ${
+                      isActive
+                        ? isDashboard
+                          ? "bg-blue-600 text-white border-l-4 border-blue-400"
+                          : "bg-slate-700 text-white border-l-4 border-purple-500"
+                        : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                    }`}
+                  >
+                    <Icon
+                      size={18}
+                      className={
+                        isActive
+                          ? "text-white"
+                          : "text-slate-400 group-hover:text-white"
+                      }
+                    />
+                    <span>{item.name}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </aside>
 
-            return (
-              <li key={index}>
-                <Link
-                  href={path}
-                  className={`flex items-center p-2 rounded-lg transition-all duration-200 ${
-                    isActive
-                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg"
-                      : "hover:bg-gray-700 hover:text-gray-100"
-                  }`}
-                  onClick={toggleSidebar} // Close sidebar on link click
-                >
-                  <span className="mr-3">{item.icon}</span>
-                  <span className="text-sm font-medium">{item.name}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      {/* Overlay for mobile when sidebar is open */}
+      {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-10 md:hidden"
           onClick={toggleSidebar}
-        ></div>
+          aria-hidden="true"
+        />
       )}
     </>
   );
