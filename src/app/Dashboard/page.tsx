@@ -10,7 +10,7 @@ import PremiumUsers from "../components/PremiumUsers";
 import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
 import UsersByCountryChart from "../components/UserByCountryChart";
-import { TrendingUp, Globe, Users, Clock, Crown, ArrowRight } from "lucide-react";
+import { TrendingUp, Globe, Users, Clock, Crown, ArrowRight, Link } from "lucide-react";
 
 const DashboardPage: React.FC = () => {
   const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">("monthly");
