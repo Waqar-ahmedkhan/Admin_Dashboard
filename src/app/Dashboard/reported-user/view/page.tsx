@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import DashboardLayout from "../../components/DashboardLayout";
 import {
   Table,
   TableHeader,
@@ -18,7 +17,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dialog";
 import {
   Card,
   CardContent,
@@ -36,7 +35,10 @@ import {
 } from "@/components/ui/select";
 import { Search, Filter, UserX, Download } from "lucide-react";
 import Link from "next/link";
-import { Label } from "recharts";
+import { Label } from "@/components/ui/label"; // Use shadcn/ui Label instead of recharts
+
+// Placeholder for DashboardLayout (to be replaced with correct import)
+import DashboardLayout from "../../../components/DashboardLayout"; // Adjust path as needed
 
 interface ReportedUser {
   id: number;
