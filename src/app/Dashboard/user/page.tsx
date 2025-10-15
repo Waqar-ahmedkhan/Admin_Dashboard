@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import DashboardLayout from "../../components/DashboardLayout";
+import DashboardLayout from "../../../components/DashboardLayout";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,13 @@ import {
   ArrowUp,
   ArrowDown,
 } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -51,7 +57,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { useUserContext } from "@/lib/userContext"; // Adjust path as needed
+import { useUserContext, User } from "@/lib/userContext";
 
 const ITEMS_PER_PAGE_OPTIONS = [5, 10, 20, 50];
 const DEFAULT_ITEMS_PER_PAGE = ITEMS_PER_PAGE_OPTIONS[0];
@@ -61,7 +67,9 @@ const UserListPage: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(DEFAULT_ITEMS_PER_PAGE);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(
+    DEFAULT_ITEMS_PER_PAGE
+  );
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<keyof User>("id");
@@ -77,10 +85,19 @@ const UserListPage: React.FC = () => {
   const parseEntry = (entry: string): Date => {
     const [datePart, timePart, ampm] = entry.split(" ");
     const [day, month, year] = datePart.split("/").map(Number);
-    let [hour, minute] = timePart.split(":").map(Number);
-    if (ampm === "PM" && hour !== 12) hour += 12;
-    if (ampm === "AM" && hour === 12) hour = 0;
-    return new Date(year, month - 1, day, hour, minute);
+    const [hour, minute] = timePart.split(":").map(Number); // Use const
+    let hourAdjusted = hour;
+    if (ampm === "PM" && hour !== 12) hourAdjusted += 12;
+    if (ampm === "AM" && hour === 12) hourAdjusted = 0;
+    return new Date(year, month - 1, day, hourAdjusted, minute);
+  };
+
+  // Type-safe property access
+  const getUserProperty = <K extends keyof User>(
+    user: User,
+    key: K
+  ): User[K] => {
+    return user[key];
   };
 
   // Filter users
@@ -89,13 +106,15 @@ const UserListPage: React.FC = () => {
       (user.name.toLowerCase().includes(search.toLowerCase()) ||
         user.email.toLowerCase().includes(search.toLowerCase())) &&
       (roleFilter === "all" || user.role === roleFilter) &&
-      (statusFilter === "all" || (statusFilter === "active" ? user.status : !user.status))
+      (statusFilter === "all" ||
+        (statusFilter === "active" ? user.status : !user.status))
   );
 
   // Sort users
   const sortedUsers = [...filteredUsers].sort((a, b) => {
-    let va = a[sortField];
-    let vb = b[sortField];
+    let va: User[keyof User] | Date = getUserProperty(a, sortField);
+    let vb: User[keyof User] | Date = getUserProperty(b, sortField);
+
     if (sortField === "entry") {
       va = parseEntry(va as string);
       vb = parseEntry(vb as string);
@@ -109,6 +128,7 @@ const UserListPage: React.FC = () => {
       va = (va as string).toLowerCase();
       vb = (vb as string).toLowerCase();
     }
+
     if (va < vb) return sortOrder === "asc" ? -1 : 1;
     if (va > vb) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -139,9 +159,13 @@ const UserListPage: React.FC = () => {
 
   const handleSelectAll = () => {
     const currentPageIds = paginatedUsers.map((user) => user.id);
-    const allSelected = currentPageIds.every((id) => selectedUsers.includes(id));
+    const allSelected = currentPageIds.every((id) =>
+      selectedUsers.includes(id)
+    );
     if (allSelected) {
-      setSelectedUsers((prev) => prev.filter((id) => !currentPageIds.includes(id)));
+      setSelectedUsers((prev) =>
+        prev.filter((id) => !currentPageIds.includes(id))
+      );
     } else {
       setSelectedUsers((prev) => [...new Set([...prev, ...currentPageIds])]);
     }
@@ -151,19 +175,25 @@ const UserListPage: React.FC = () => {
   const updateStatus = (status: boolean) => {
     if (selectedUsers.length === 0) return;
     setUsers((prev) =>
-      prev.map((user) => (selectedUsers.includes(user.id) ? { ...user, status } : user))
+      prev.map((user) =>
+        selectedUsers.includes(user.id) ? { ...user, status } : user
+      )
     );
     setSelectedUsers([]);
     toast({
       title: "Status Updated",
-      description: `Selected users have been ${status ? "enabled" : "disabled"}.`,
+      description: `Selected users have been ${
+        status ? "enabled" : "disabled"
+      }.`,
     });
   };
 
   // Toggle single status
   const toggleUserStatus = (id: number) => {
     setUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, status: !user.status } : user))
+      prev.map((user) =>
+        user.id === id ? { ...user, status: !user.status } : user
+      )
     );
     toast({
       title: "Status Toggled",
@@ -231,7 +261,11 @@ const UserListPage: React.FC = () => {
 
     if (leftSide > 2) items.push(<PaginationEllipsis key="left-ellipsis" />);
 
-    for (let i = Math.max(1, leftSide); i <= Math.min(totalPages, rightSide); i++) {
+    for (
+      let i = Math.max(1, leftSide);
+      i <= Math.min(totalPages, rightSide);
+      i++
+    ) {
       items.push(
         <PaginationItem key={i}>
           <Button
@@ -245,7 +279,8 @@ const UserListPage: React.FC = () => {
       );
     }
 
-    if (rightSide < totalPages - 1) items.push(<PaginationEllipsis key="right-ellipsis" />);
+    if (rightSide < totalPages - 1)
+      items.push(<PaginationEllipsis key="right-ellipsis" />);
 
     return items;
   };
@@ -253,7 +288,9 @@ const UserListPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6 max-w-7xl mx-auto bg-gray-50 rounded-xl shadow-lg">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-800">User Management</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-800">
+          User Management
+        </h1>
 
         {/* Header Controls */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
@@ -293,11 +330,19 @@ const UserListPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <Button onClick={handleCreate} variant="default" className="gap-2 bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={handleCreate}
+              variant="default"
+              className="gap-2 bg-blue-600 hover:bg-blue-700"
+            >
               <Plus className="h-4 w-4" />
               Add User
             </Button>
-            <Button onClick={exportUsers} variant="outline" className="gap-2 border-gray-300">
+            <Button
+              onClick={exportUsers}
+              variant="outline"
+              className="gap-2 border-gray-300"
+            >
               <Download className="h-4 w-4" />
               Export
             </Button>
@@ -308,7 +353,10 @@ const UserListPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 mb-6">
           {selectedUsers.length > 0 && (
             <>
-              <Badge variant="outline" className="px-3 py-1 text-sm border-blue-200 text-blue-600">
+              <Badge
+                variant="outline"
+                className="px-3 py-1 text-sm border-blue-200 text-blue-600"
+              >
                 {selectedUsers.length} selected
               </Badge>
               <Button
@@ -342,39 +390,94 @@ const UserListPage: React.FC = () => {
                     className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     checked={
                       paginatedUsers.length > 0 &&
-                      paginatedUsers.every((user) => selectedUsers.includes(user.id))
+                      paginatedUsers.every((user) =>
+                        selectedUsers.includes(user.id)
+                      )
                     }
                     onChange={handleSelectAll}
                   />
                 </TableHead>
-                <TableHead className="min-w-[150px] cursor-pointer" onClick={() => handleSort("name")}>
-                  Name {sortField === "name" && (sortOrder === "asc" ? <ArrowUp className="inline h-4 w-4" /> : <ArrowDown className="inline h-4 w-4" />)}
+                <TableHead
+                  className="min-w-[150px] cursor-pointer"
+                  onClick={() => handleSort("name")}
+                >
+                  Name{" "}
+                  {sortField === "name" &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="inline h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="inline h-4 w-4" />
+                    ))}
                 </TableHead>
-                <TableHead className="min-w-[200px] cursor-pointer" onClick={() => handleSort("email")}>
-                  Email {sortField === "email" && (sortOrder === "asc" ? <ArrowUp className="inline h-4 w-4" /> : <ArrowDown className="inline h-4 w-4" />)}
+                <TableHead
+                  className="min-w-[200px] cursor-pointer"
+                  onClick={() => handleSort("email")}
+                >
+                  Email{" "}
+                  {sortField === "email" &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="inline h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="inline h-4 w-4" />
+                    ))}
                 </TableHead>
-                <TableHead className="min-w-[100px] cursor-pointer" onClick={() => handleSort("role")}>
-                  Role {sortField === "role" && (sortOrder === "asc" ? <ArrowUp className="inline h-4 w-4" /> : <ArrowDown className="inline h-4 w-4" />)}
+                <TableHead
+                  className="min-w-[100px] cursor-pointer"
+                  onClick={() => handleSort("role")}
+                >
+                  Role{" "}
+                  {sortField === "role" &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="inline h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="inline h-4 w-4" />
+                    ))}
                 </TableHead>
-                <TableHead className="min-w-[150px] cursor-pointer" onClick={() => handleSort("entry")}>
-                  Entry Date {sortField === "entry" && (sortOrder === "asc" ? <ArrowUp className="inline h-4 w-4" /> : <ArrowDown className="inline h-4 w-4" />)}
+                <TableHead
+                  className="min-w-[150px] cursor-pointer"
+                  onClick={() => handleSort("entry")}
+                >
+                  Entry Date{" "}
+                  {sortField === "entry" &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="inline h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="inline h-4 w-4" />
+                    ))}
                 </TableHead>
-                <TableHead className="text-center min-w-[100px] cursor-pointer" onClick={() => handleSort("status")}>
-                  Status {sortField === "status" && (sortOrder === "asc" ? <ArrowUp className="inline h-4 w-4" /> : <ArrowDown className="inline h-4 w-4" />)}
+                <TableHead
+                  className="text-center min-w-[100px] cursor-pointer"
+                  onClick={() => handleSort("status")}
+                >
+                  Status{" "}
+                  {sortField === "status" &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="inline h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="inline h-4 w-4" />
+                    ))}
                 </TableHead>
-                <TableHead className="text-center min-w-[100px]">Actions</TableHead>
+                <TableHead className="text-center min-w-[100px]">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedUsers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                  <TableCell
+                    colSpan={7}
+                    className="text-center py-8 text-gray-500"
+                  >
                     No users found
                   </TableCell>
                 </TableRow>
               ) : (
                 paginatedUsers.map((user) => (
-                  <TableRow key={user.id} className="hover:bg-gray-50 transition-colors">
+                  <TableRow
+                    key={user.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <TableCell className="text-center">
                       <input
                         type="checkbox"
@@ -383,14 +486,29 @@ const UserListPage: React.FC = () => {
                         onChange={() => handleSelect(user.id)}
                       />
                     </TableCell>
-                    <TableCell className="font-medium text-gray-800">{user.name}</TableCell>
-                    <TableCell className="text-gray-600 truncate">{user.email}</TableCell>
+                    <TableCell className="font-medium text-gray-800">
+                      {user.name}
+                    </TableCell>
+                    <TableCell className="text-gray-600 truncate">
+                      {user.email}
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={user.role === "Staff" ? "secondary" : "outline"} className={user.role === "Staff" ? "bg-blue-100 text-blue-800" : ""}>
+                      <Badge
+                        variant={
+                          user.role === "Staff" ? "secondary" : "outline"
+                        }
+                        className={
+                          user.role === "Staff"
+                            ? "bg-blue-100 text-blue-800"
+                            : ""
+                        }
+                      >
                         {user.role}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-600">{user.entry}</TableCell>
+                    <TableCell className="text-gray-600">
+                      {user.entry}
+                    </TableCell>
                     <TableCell className="text-center">
                       <Switch
                         checked={user.status}
@@ -402,20 +520,33 @@ const UserListPage: React.FC = () => {
                       <div className="flex justify-center">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                            >
                               <MoreVertical className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="flex items-center" onClick={() => handleView(user.id)}>
+                            <DropdownMenuItem
+                              className="flex items-center"
+                              onClick={() => handleView(user.id)}
+                            >
                               <Eye className="mr-2 h-4 w-4" />
                               <span>View</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex items-center" onClick={() => handleEdit(user.id)}>
+                            <DropdownMenuItem
+                              className="flex items-center"
+                              onClick={() => handleEdit(user.id)}
+                            >
                               <Edit className="mr-2 h-4 w-4" />
                               <span>Edit</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="flex items-center text-red-600" onClick={() => handleDelete(user)}>
+                            <DropdownMenuItem
+                              className="flex items-center text-red-600"
+                              onClick={() => handleDelete(user)}
+                            >
                               <Trash2 className="mr-2 h-4 w-4" />
                               <span>Delete</span>
                             </DropdownMenuItem>
@@ -455,7 +586,8 @@ const UserListPage: React.FC = () => {
               </Select>
               <span>
                 Showing {(currentPage - 1) * itemsPerPage + 1}-
-                {Math.min(currentPage * itemsPerPage, sortedUsers.length)} of {sortedUsers.length}
+                {Math.min(currentPage * itemsPerPage, sortedUsers.length)} of{" "}
+                {sortedUsers.length}
               </span>
             </div>
 
@@ -464,14 +596,22 @@ const UserListPage: React.FC = () => {
                 <PaginationItem>
                   <PaginationPrevious
                     onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    className={
+                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                    }
                   />
                 </PaginationItem>
                 {renderPaginationItems()}
                 <PaginationItem>
                   <PaginationNext
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(totalPages, p + 1))
+                    }
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : ""
+                    }
                   />
                 </PaginationItem>
               </PaginationContent>
@@ -486,7 +626,8 @@ const UserListPage: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Confirm Delete</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this user? This action cannot be undone.
+              Are you sure you want to delete this user? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
