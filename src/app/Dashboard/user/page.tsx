@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import DashboardLayout from "../../../components/DashboardLayout";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -286,7 +285,7 @@ const UserListPage: React.FC = () => {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <div className="p-4 md:p-6 max-w-7xl mx-auto bg-gray-50 rounded-xl shadow-lg">
         <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-800">
           User Management
@@ -640,7 +639,7 @@ const UserListPage: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </DashboardLayout>
+    </>
   );
 };
 
