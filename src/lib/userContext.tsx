@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // Define the User type
-interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
@@ -54,9 +54,15 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [users, setUsers] = useState<User[]>(initialUsers);
-  return <UserContext.Provider value={{ users, setUsers }}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={{ users, setUsers }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useUserContext = () => {

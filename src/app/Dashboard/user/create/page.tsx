@@ -6,11 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useUserContext } from "@/lib/userContext";
+import { useUserContext, User } from "@/lib/userContext";
 
 const CreateUserPage: React.FC = () => {
   const router = useRouter();
@@ -31,13 +37,18 @@ const CreateUserPage: React.FC = () => {
     if (editedUser.name && editedUser.email) {
       const newId = Math.max(...users.map((u) => u.id), 0) + 1;
       const now = new Date();
-      const entry = `${now.getDate().toString().padStart(2, "0")}/${(now.getMonth() + 1)
+      const entry = `${now.getDate().toString().padStart(2, "0")}/${(
+        now.getMonth() + 1
+      )
         .toString()
-        .padStart(2, "0")}/${now.getFullYear()} ${now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      })}`;
+        .padStart(2, "0")}/${now.getFullYear()} ${now.toLocaleTimeString(
+        "en-US",
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }
+      )}`;
       const newUser: User = {
         id: newId,
         entry,
@@ -61,10 +72,16 @@ const CreateUserPage: React.FC = () => {
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6 max-w-2xl mx-auto bg-gray-50 rounded-xl shadow-lg">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-6 gap-2">
+        <Button
+          variant="ghost"
+          onClick={() => router.back()}
+          className="mb-6 gap-2"
+        >
           <ArrowLeft className="h-4 w-4" /> Back to Users
         </Button>
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">Add New User</h1>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800">
+          Add New User
+        </h1>
         <div className="bg-white p-6 rounded-xl shadow-md space-y-6 border border-gray-200">
           <div>
             <Label htmlFor="name">Name</Label>
@@ -87,7 +104,10 @@ const CreateUserPage: React.FC = () => {
           </div>
           <div>
             <Label>Role</Label>
-            <Select value={editedUser.role} onValueChange={(value) => handleFormChange("role", value)}>
+            <Select
+              value={editedUser.role}
+              onValueChange={(value) => handleFormChange("role", value)}
+            >
               <SelectTrigger className="mt-1 border-gray-300">
                 <SelectValue />
               </SelectTrigger>
@@ -104,7 +124,9 @@ const CreateUserPage: React.FC = () => {
               onCheckedChange={(checked) => handleFormChange("status", checked)}
               className="data-[state=checked]:bg-green-500"
             />
-            <span className={editedUser.status ? "text-green-600" : "text-red-600"}>
+            <span
+              className={editedUser.status ? "text-green-600" : "text-red-600"}
+            >
               {editedUser.status ? "Active" : "Inactive"}
             </span>
           </div>
@@ -112,7 +134,10 @@ const CreateUserPage: React.FC = () => {
             <Button variant="outline" onClick={() => router.back()}>
               Cancel
             </Button>
-            <Button onClick={saveUser} className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={saveUser}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Create User
             </Button>
           </div>
