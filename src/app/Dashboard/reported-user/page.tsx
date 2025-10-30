@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import DashboardLayout from '../../components/DashboardLayout';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { useRouter, useParams } from 'next/navigation';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import DashboardLayout from "../../components/DashboardLayout";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 interface ReportedUser {
   id: number;
@@ -36,81 +36,81 @@ const CompleteReportedUserPage: React.FC = () => {
       {
         id: 1,
         userId: 20,
-        name: 'John Doe',
-        message: 'False gender',
-        gender: 'Male',
-        userType: 'custom',
-        requestedAt: '2024-12-19 17:35:03',
+        name: "John Doe",
+        message: "False gender",
+        gender: "Male",
+        userType: "custom",
+        requestedAt: "2024-12-19 17:35:03",
       },
       {
         id: 2,
         userId: 18,
-        name: 'Jane Smith',
-        message: 'False gender',
-        gender: 'Female',
-        userType: 'custom',
-        requestedAt: '2024-12-19 17:36:50',
+        name: "Jane Smith",
+        message: "False gender",
+        gender: "Female",
+        userType: "custom",
+        requestedAt: "2024-12-19 17:36:50",
       },
       {
         id: 3,
         userId: 19,
-        name: 'Alex Johnson',
-        message: 'False gender',
-        gender: 'Non-binary',
-        userType: 'custom',
-        requestedAt: '2024-12-19 20:37:08',
+        name: "Alex Johnson",
+        message: "False gender",
+        gender: "Non-binary",
+        userType: "custom",
+        requestedAt: "2024-12-19 20:37:08",
       },
       {
         id: 4,
         userId: 18,
-        name: 'Sam Wilson',
-        message: 'Fraud',
-        gender: 'Male',
-        userType: 'custom',
-        requestedAt: '2024-12-19 21:04:35',
+        name: "Sam Wilson",
+        message: "Fraud",
+        gender: "Male",
+        userType: "custom",
+        requestedAt: "2024-12-19 21:04:35",
       },
       {
         id: 5,
         userId: 13,
-        name: 'Taylor Swift',
-        message: 'Fraud',
-        gender: 'Female',
-        userType: 'livestream',
-        requestedAt: '2024-12-19 21:30:26',
+        name: "Taylor Swift",
+        message: "Fraud",
+        gender: "Female",
+        userType: "livestream",
+        requestedAt: "2024-12-19 21:30:26",
       },
       {
         id: 6,
         userId: 39,
-        name: 'Riley Cooper',
-        message: 'Hate Speech',
-        gender: 'Female',
-        userType: 'custom',
-        requestedAt: '2024-12-23 11:48:47',
+        name: "Riley Cooper",
+        message: "Hate Speech",
+        gender: "Female",
+        userType: "custom",
+        requestedAt: "2024-12-23 11:48:47",
       },
     ];
 
-    const selectedUser = sampleUsers.find(u => u.id === Number(userId));
+    const selectedUser = sampleUsers.find((u) => u.id === Number(userId));
     setUser(selectedUser || null);
   }, [userId]);
 
   const handleApprove = () => {
     // In a real app, this would call an API to approve the user
-    router.push('/reported-users');
+    router.push("/reported-users");
   };
 
   const handleReject = () => {
     // In a real app, this would call an API to reject the user
-    router.push('/reported-users');
+    router.push("/reported-users");
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     }).format(date);
   };
 
@@ -133,7 +133,9 @@ const CompleteReportedUserPage: React.FC = () => {
       <div className="p-6">
         <Card className="shadow-md">
           <CardHeader className="bg-gray-50">
-            <CardTitle className="text-2xl font-bold text-gray-800">Complete User Report</CardTitle>
+            <CardTitle className="text-2xl font-bold text-gray-800">
+              Complete User Report
+            </CardTitle>
             <CardDescription>
               Finalize the action for this reported user
             </CardDescription>
@@ -151,7 +153,9 @@ const CompleteReportedUserPage: React.FC = () => {
                 </div>
                 <div>
                   <Label className="text-xs text-gray-500">Gender</Label>
-                  <p className="font-medium">{user.gender || "Not specified"}</p>
+                  <p className="font-medium">
+                    {user.gender || "Not specified"}
+                  </p>
                 </div>
                 <div>
                   <Label className="text-xs text-gray-500">User Type</Label>
@@ -171,17 +175,10 @@ const CompleteReportedUserPage: React.FC = () => {
                   <Button variant="outline">Cancel</Button>
                 </Link>
                 <div className="flex gap-2">
-                  <Button 
-                    variant="destructive" 
-                    onClick={handleReject}
-                  >
+                  <Button variant="destructive" onClick={handleReject}>
                     Reject User
                   </Button>
-                  <Button 
-                    onClick={handleApprove}
-                  >
-                    Approve User
-                  </Button>
+                  <Button onClick={handleApprove}>Approve User</Button>
                 </div>
               </div>
             </div>

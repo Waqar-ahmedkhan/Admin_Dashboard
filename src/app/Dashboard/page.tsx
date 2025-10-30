@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import DashboardLayout from "../components/DashboardLayout";
 import MonthlyUserChart from "../components/MonthlyUserChart";
@@ -10,10 +16,20 @@ import PremiumUsers from "../components/PremiumUsers";
 import RecentUsers from "../components/RecentUser";
 import RecentlyContactedUsers from "../components/RecentlyContactedUser";
 import UsersByCountryChart from "../components/UserByCountryChart";
-import { TrendingUp, Globe, Users, Clock, Crown, ArrowRight, Link } from "lucide-react";
+import {
+  TrendingUp,
+  Globe,
+  Users,
+  Clock,
+  Crown,
+  ArrowRight,
+  Link,
+} from "lucide-react";
 
 const DashboardPage: React.FC = () => {
-  const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">("monthly");
+  const [timeFrame, setTimeFrame] = useState<"daily" | "monthly" | "yearly">(
+    "monthly"
+  );
   const [activeTab, setActiveTab] = useState("overview");
 
   // Sample data
@@ -121,22 +137,35 @@ const DashboardPage: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header Section - Fully Responsive */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Dashboard Overview</h1>
-            <Select 
-              value={timeFrame} 
-              onValueChange={(value) => setTimeFrame(value as "daily" | "monthly" | "yearly")}
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+              Dashboard Overview
+            </h1>
+            <Select
+              value={timeFrame}
+              onValueChange={(value) =>
+                setTimeFrame(value as "daily" | "monthly" | "yearly")
+              }
             >
               <SelectTrigger className="w-full sm:w-48 bg-white border-gray-200 shadow-sm hover:shadow-md transition-shadow rounded-lg">
                 <SelectValue placeholder="Select Time Frame" />
               </SelectTrigger>
               <SelectContent className="rounded-lg shadow-lg">
-                <SelectItem value="daily" className="hover:bg-gray-100 rounded-lg">
+                <SelectItem
+                  value="daily"
+                  className="hover:bg-gray-100 rounded-lg"
+                >
                   Daily
                 </SelectItem>
-                <SelectItem value="monthly" className="hover:bg-gray-100 rounded-lg">
+                <SelectItem
+                  value="monthly"
+                  className="hover:bg-gray-100 rounded-lg"
+                >
                   Monthly
                 </SelectItem>
-                <SelectItem value="yearly" className="hover:bg-gray-100 rounded-lg">
+                <SelectItem
+                  value="yearly"
+                  className="hover:bg-gray-100 rounded-lg"
+                >
                   Yearly
                 </SelectItem>
               </SelectContent>
@@ -144,31 +173,35 @@ const DashboardPage: React.FC = () => {
           </div>
 
           {/* Tabs Navigation - Modern Design */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-1">
-              <TabsTrigger 
-                value="overview" 
+              <TabsTrigger
+                value="overview"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
               >
                 <TrendingUp className="h-4 w-4" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger 
-                value="analytics" 
+              <TabsTrigger
+                value="analytics"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
               >
                 <Globe className="h-4 w-4" />
                 Analytics
               </TabsTrigger>
-              <TabsTrigger 
-                value="users" 
+              <TabsTrigger
+                value="users"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
               >
                 <Users className="h-4 w-4" />
                 Users
               </TabsTrigger>
-              <TabsTrigger 
-                value="premium" 
+              <TabsTrigger
+                value="premium"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-600 data-[state=active]:shadow-inner rounded-lg transition-all flex items-center justify-center gap-1.5 py-3 text-sm font-medium"
               >
                 <Crown className="h-4 w-4" />
@@ -184,17 +217,22 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <Globe className="h-5 w-5 text-blue-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Users by Country</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Users by Country
+                      </h2>
                     </div>
-                    <Link 
-                      href="/users-by-country" 
+                    <Link
+                      href="/users-by-country"
                       className="text-sm font-medium text-blue-500 hover:text-blue-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />
                     </Link>
                   </div>
                   <div className="h-[18rem] sm:h-[20rem] p-5">
-                    <UsersByCountryChart data={usersByCountry} timeFrame={timeFrame} />
+                    <UsersByCountryChart
+                      data={usersByCountry}
+                      timeFrame={timeFrame}
+                    />
                   </div>
                 </div>
 
@@ -203,10 +241,12 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-green-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Monthly User Growth</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Monthly User Growth
+                      </h2>
                     </div>
-                    <Link 
-                      href="/monthly-growth" 
+                    <Link
+                      href="/monthly-growth"
                       className="text-sm font-medium text-green-500 hover:text-green-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />
@@ -227,10 +267,12 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-purple-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Yearly User Growth</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Yearly User Growth
+                      </h2>
                     </div>
-                    <Link 
-                      href="/yearly-growth" 
+                    <Link
+                      href="/yearly-growth"
                       className="text-sm font-medium text-purple-500 hover:text-purple-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />
@@ -251,10 +293,12 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <Users className="h-5 w-5 text-blue-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Recent Users</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Recent Users
+                      </h2>
                     </div>
-                    <Link 
-                      href="/recent-users" 
+                    <Link
+                      href="/recent-users"
                       className="text-sm font-medium text-blue-500 hover:text-blue-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />
@@ -270,10 +314,12 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <Clock className="h-5 w-5 text-green-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Recently Contacted Users</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Recently Contacted Users
+                      </h2>
                     </div>
-                    <Link 
-                      href="/recently-contacted" 
+                    <Link
+                      href="/recently-contacted"
                       className="text-sm font-medium text-green-500 hover:text-green-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />
@@ -294,10 +340,12 @@ const DashboardPage: React.FC = () => {
                   <div className="flex items-center justify-between p-5 border-b border-gray-100">
                     <div className="flex items-center gap-2">
                       <Crown className="h-5 w-5 text-yellow-500" />
-                      <h2 className="text-lg font-semibold text-gray-800">Premium Users</h2>
+                      <h2 className="text-lg font-semibold text-gray-800">
+                        Premium Users
+                      </h2>
                     </div>
-                    <Link 
-                      href="/premium-users" 
+                    <Link
+                      href="/premium-users"
                       className="text-sm font-medium text-yellow-500 hover:text-yellow-700 flex items-center gap-1 transition-colors"
                     >
                       View all <ArrowRight className="h-4 w-4" />

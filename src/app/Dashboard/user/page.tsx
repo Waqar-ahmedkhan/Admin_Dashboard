@@ -57,6 +57,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useUserContext, User } from "@/lib/userContext";
+import DashboardLayout from "@/app/components/DashboardLayout";
 
 const ITEMS_PER_PAGE_OPTIONS = [5, 10, 20, 50];
 const DEFAULT_ITEMS_PER_PAGE = ITEMS_PER_PAGE_OPTIONS[0];
@@ -286,359 +287,366 @@ const UserListPage: React.FC = () => {
 
   return (
     <>
-      <div className="p-4 md:p-6 max-w-7xl mx-auto bg-gray-50 rounded-xl shadow-lg">
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-800">
-          User Management
-        </h1>
+      <DashboardLayout>
+        <div className="p-4 md:p-6 max-w-7xl mx-auto bg-gray-50 rounded-xl shadow-lg">
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-gray-800">
+            User Management
+          </h1>
 
-        {/* Header Controls */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
-              <Input
-                type="text"
-                placeholder="Search users..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border-gray-300 focus:border-blue-500"
-              />
+          {/* Header Controls */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+              <div className="relative w-full sm:w-64">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Search users..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10 pr-4 py-2 border-gray-300 focus:border-blue-500"
+                />
+              </div>
+
+              <Select value={roleFilter} onValueChange={setRoleFilter}>
+                <SelectTrigger className="w-full sm:w-36 mt-2 sm:mt-0 border-gray-300">
+                  <SelectValue placeholder="Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Roles</SelectItem>
+                  <SelectItem value="User">User</SelectItem>
+                  <SelectItem value="Staff">Staff</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-36 mt-2 sm:mt-0 border-gray-300">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
-            <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-full sm:w-36 mt-2 sm:mt-0 border-gray-300">
-                <SelectValue placeholder="Role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Roles</SelectItem>
-                <SelectItem value="User">User</SelectItem>
-                <SelectItem value="Staff">Staff</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-36 mt-2 sm:mt-0 border-gray-300">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <Button
-              onClick={handleCreate}
-              variant="default"
-              className="gap-2 bg-blue-600 hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4" />
-              Add User
-            </Button>
-            <Button
-              onClick={exportUsers}
-              variant="outline"
-              className="gap-2 border-gray-300"
-            >
-              <Download className="h-4 w-4" />
-              Export
-            </Button>
-          </div>
-        </div>
-
-        {/* Selection Controls */}
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          {selectedUsers.length > 0 && (
-            <>
-              <Badge
-                variant="outline"
-                className="px-3 py-1 text-sm border-blue-200 text-blue-600"
-              >
-                {selectedUsers.length} selected
-              </Badge>
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
               <Button
-                onClick={() => updateStatus(true)}
-                variant="outline"
-                className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100"
+                onClick={handleCreate}
+                variant="default"
+                className="gap-2 bg-blue-600 hover:bg-blue-700"
               >
-                <Check className="mr-2 h-4 w-4" />
-                Enable Selected
+                <Plus className="h-4 w-4" />
+                Add User
               </Button>
               <Button
-                onClick={() => updateStatus(false)}
+                onClick={exportUsers}
                 variant="outline"
-                className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                className="gap-2 border-gray-300"
               >
-                <X className="mr-2 h-4 w-4" />
-                Disable Selected
+                <Download className="h-4 w-4" />
+                Export
               </Button>
-            </>
+            </div>
+          </div>
+
+          {/* Selection Controls */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            {selectedUsers.length > 0 && (
+              <>
+                <Badge
+                  variant="outline"
+                  className="px-3 py-1 text-sm border-blue-200 text-blue-600"
+                >
+                  {selectedUsers.length} selected
+                </Badge>
+                <Button
+                  onClick={() => updateStatus(true)}
+                  variant="outline"
+                  className="bg-green-50 text-green-600 border-green-200 hover:bg-green-100"
+                >
+                  <Check className="mr-2 h-4 w-4" />
+                  Enable Selected
+                </Button>
+                <Button
+                  onClick={() => updateStatus(false)}
+                  variant="outline"
+                  className="bg-red-50 text-red-600 border-red-200 hover:bg-red-100"
+                >
+                  <X className="mr-2 h-4 w-4" />
+                  Disable Selected
+                </Button>
+              </>
+            )}
+          </div>
+
+          {/* Users Table */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-100">
+                  <TableHead className="w-12 text-center">
+                    <input
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      checked={
+                        paginatedUsers.length > 0 &&
+                        paginatedUsers.every((user) =>
+                          selectedUsers.includes(user.id)
+                        )
+                      }
+                      onChange={handleSelectAll}
+                    />
+                  </TableHead>
+                  <TableHead
+                    className="min-w-[150px] cursor-pointer"
+                    onClick={() => handleSort("name")}
+                  >
+                    Name{" "}
+                    {sortField === "name" &&
+                      (sortOrder === "asc" ? (
+                        <ArrowUp className="inline h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="inline h-4 w-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead
+                    className="min-w-[200px] cursor-pointer"
+                    onClick={() => handleSort("email")}
+                  >
+                    Email{" "}
+                    {sortField === "email" &&
+                      (sortOrder === "asc" ? (
+                        <ArrowUp className="inline h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="inline h-4 w-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead
+                    className="min-w-[100px] cursor-pointer"
+                    onClick={() => handleSort("role")}
+                  >
+                    Role{" "}
+                    {sortField === "role" &&
+                      (sortOrder === "asc" ? (
+                        <ArrowUp className="inline h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="inline h-4 w-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead
+                    className="min-w-[150px] cursor-pointer"
+                    onClick={() => handleSort("entry")}
+                  >
+                    Entry Date{" "}
+                    {sortField === "entry" &&
+                      (sortOrder === "asc" ? (
+                        <ArrowUp className="inline h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="inline h-4 w-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead
+                    className="text-center min-w-[100px] cursor-pointer"
+                    onClick={() => handleSort("status")}
+                  >
+                    Status{" "}
+                    {sortField === "status" &&
+                      (sortOrder === "asc" ? (
+                        <ArrowUp className="inline h-4 w-4" />
+                      ) : (
+                        <ArrowDown className="inline h-4 w-4" />
+                      ))}
+                  </TableHead>
+                  <TableHead className="text-center min-w-[100px]">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedUsers.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={7}
+                      className="text-center py-8 text-gray-500"
+                    >
+                      No users found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  paginatedUsers.map((user) => (
+                    <TableRow
+                      key={user.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <TableCell className="text-center">
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          checked={selectedUsers.includes(user.id)}
+                          onChange={() => handleSelect(user.id)}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium text-gray-800">
+                        {user.name}
+                      </TableCell>
+                      <TableCell className="text-gray-600 truncate">
+                        {user.email}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            user.role === "Staff" ? "secondary" : "outline"
+                          }
+                          className={
+                            user.role === "Staff"
+                              ? "bg-blue-100 text-blue-800"
+                              : ""
+                          }
+                        >
+                          {user.role}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-gray-600">
+                        {user.entry}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Switch
+                          checked={user.status}
+                          onCheckedChange={() => toggleUserStatus(user.id)}
+                          className={`data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500`}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex justify-center">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                className="flex items-center"
+                                onClick={() => handleView(user.id)}
+                              >
+                                <Eye className="mr-2 h-4 w-4" />
+                                <span>View</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="flex items-center"
+                                onClick={() => handleEdit(user.id)}
+                              >
+                                <Edit className="mr-2 h-4 w-4" />
+                                <span>Edit</span>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="flex items-center text-red-600"
+                                onClick={() => handleDelete(user)}
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                <span>Delete</span>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          {sortedUsers.length > itemsPerPage && (
+            <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span>Rows per page:</span>
+                <Select
+                  value={itemsPerPage.toString()}
+                  onValueChange={(value) => {
+                    setItemsPerPage(Number(value));
+                    setCurrentPage(1);
+                  }}
+                >
+                  <SelectTrigger className="w-20 border-gray-300">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+                      <SelectItem key={option} value={option.toString()}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <span>
+                  Showing {(currentPage - 1) * itemsPerPage + 1}-
+                  {Math.min(currentPage * itemsPerPage, sortedUsers.length)} of{" "}
+                  {sortedUsers.length}
+                </span>
+              </div>
+
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                  {renderPaginationItems()}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() =>
+                        setCurrentPage((p) => Math.min(totalPages, p + 1))
+                      }
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </div>
           )}
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-100">
-                <TableHead className="w-12 text-center">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    checked={
-                      paginatedUsers.length > 0 &&
-                      paginatedUsers.every((user) =>
-                        selectedUsers.includes(user.id)
-                      )
-                    }
-                    onChange={handleSelectAll}
-                  />
-                </TableHead>
-                <TableHead
-                  className="min-w-[150px] cursor-pointer"
-                  onClick={() => handleSort("name")}
-                >
-                  Name{" "}
-                  {sortField === "name" &&
-                    (sortOrder === "asc" ? (
-                      <ArrowUp className="inline h-4 w-4" />
-                    ) : (
-                      <ArrowDown className="inline h-4 w-4" />
-                    ))}
-                </TableHead>
-                <TableHead
-                  className="min-w-[200px] cursor-pointer"
-                  onClick={() => handleSort("email")}
-                >
-                  Email{" "}
-                  {sortField === "email" &&
-                    (sortOrder === "asc" ? (
-                      <ArrowUp className="inline h-4 w-4" />
-                    ) : (
-                      <ArrowDown className="inline h-4 w-4" />
-                    ))}
-                </TableHead>
-                <TableHead
-                  className="min-w-[100px] cursor-pointer"
-                  onClick={() => handleSort("role")}
-                >
-                  Role{" "}
-                  {sortField === "role" &&
-                    (sortOrder === "asc" ? (
-                      <ArrowUp className="inline h-4 w-4" />
-                    ) : (
-                      <ArrowDown className="inline h-4 w-4" />
-                    ))}
-                </TableHead>
-                <TableHead
-                  className="min-w-[150px] cursor-pointer"
-                  onClick={() => handleSort("entry")}
-                >
-                  Entry Date{" "}
-                  {sortField === "entry" &&
-                    (sortOrder === "asc" ? (
-                      <ArrowUp className="inline h-4 w-4" />
-                    ) : (
-                      <ArrowDown className="inline h-4 w-4" />
-                    ))}
-                </TableHead>
-                <TableHead
-                  className="text-center min-w-[100px] cursor-pointer"
-                  onClick={() => handleSort("status")}
-                >
-                  Status{" "}
-                  {sortField === "status" &&
-                    (sortOrder === "asc" ? (
-                      <ArrowUp className="inline h-4 w-4" />
-                    ) : (
-                      <ArrowDown className="inline h-4 w-4" />
-                    ))}
-                </TableHead>
-                <TableHead className="text-center min-w-[100px]">
-                  Actions
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {paginatedUsers.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={7}
-                    className="text-center py-8 text-gray-500"
-                  >
-                    No users found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                paginatedUsers.map((user) => (
-                  <TableRow
-                    key={user.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <TableCell className="text-center">
-                      <input
-                        type="checkbox"
-                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        checked={selectedUsers.includes(user.id)}
-                        onChange={() => handleSelect(user.id)}
-                      />
-                    </TableCell>
-                    <TableCell className="font-medium text-gray-800">
-                      {user.name}
-                    </TableCell>
-                    <TableCell className="text-gray-600 truncate">
-                      {user.email}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          user.role === "Staff" ? "secondary" : "outline"
-                        }
-                        className={
-                          user.role === "Staff"
-                            ? "bg-blue-100 text-blue-800"
-                            : ""
-                        }
-                      >
-                        {user.role}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-gray-600">
-                      {user.entry}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Switch
-                        checked={user.status}
-                        onCheckedChange={() => toggleUserStatus(user.id)}
-                        className={`data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-red-500`}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex justify-center">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                            >
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              className="flex items-center"
-                              onClick={() => handleView(user.id)}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              <span>View</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="flex items-center"
-                              onClick={() => handleEdit(user.id)}
-                            >
-                              <Edit className="mr-2 h-4 w-4" />
-                              <span>Edit</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="flex items-center text-red-600"
-                              onClick={() => handleDelete(user)}
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              <span>Delete</span>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </div>
-
-        {/* Pagination */}
-        {sortedUsers.length > itemsPerPage && (
-          <div className="mt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>Rows per page:</span>
-              <Select
-                value={itemsPerPage.toString()}
-                onValueChange={(value) => {
-                  setItemsPerPage(Number(value));
-                  setCurrentPage(1);
-                }}
+        {/* Delete Confirmation Modal */}
+        <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Confirm Delete</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete this user? This action cannot be
+                undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setDeleteModalOpen(false)}
               >
-                <SelectTrigger className="w-20 border-gray-300">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ITEMS_PER_PAGE_OPTIONS.map((option) => (
-                    <SelectItem key={option} value={option.toString()}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <span>
-                Showing {(currentPage - 1) * itemsPerPage + 1}-
-                {Math.min(currentPage * itemsPerPage, sortedUsers.length)} of{" "}
-                {sortedUsers.length}
-              </span>
-            </div>
-
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    className={
-                      currentPage === 1 ? "pointer-events-none opacity-50" : ""
-                    }
-                  />
-                </PaginationItem>
-                {renderPaginationItems()}
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() =>
-                      setCurrentPage((p) => Math.min(totalPages, p + 1))
-                    }
-                    className={
-                      currentPage === totalPages
-                        ? "pointer-events-none opacity-50"
-                        : ""
-                    }
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-          </div>
-        )}
-      </div>
-
-      {/* Delete Confirmation Modal */}
-      <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Confirm Delete</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this user? This action cannot be
-              undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={confirmDelete}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </DashboardLayout>
     </>
   );
 };
