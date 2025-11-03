@@ -45,6 +45,55 @@ const initialUsers: User[] = [
     entry: "20/01/2025 12:21 PM",
     status: true,
   },
+
+  {
+    id: 5,
+    name: "Guest",
+    email: "guest_6d896e956993aceb_19@gmail.com",
+    role: "User",
+    entry: "20/01/2025 12:28 PM",
+    status: true,
+  },
+  {
+    id: 6,
+    name: "Asad Mobi Tech",
+    email: "asadmobitech@gmail.com",
+    role: "Staff",
+    entry: "20/01/2025 12:21 PM",
+    status: true,
+  },
+  {
+    id: 7,
+    name: "Guest",
+    email: "guest_6d896e956993aceb_19@gmail.com",
+    role: "User",
+    entry: "20/01/2025 12:28 PM",
+    status: true,
+  },
+  {
+    id: 8,
+    name: "Asad Mobi Tech",
+    email: "asadmobitech@gmail.com",
+    role: "Staff",
+    entry: "20/01/2025 12:21 PM",
+    status: true,
+  },
+  {
+    id: 9,
+    name: "Guest",
+    email: "guest_6d896e956993aceb_19@gmail.com",
+    role: "User",
+    entry: "20/01/2025 12:28 PM",
+    status: true,
+  },
+  {
+    id: 10,
+    name: "Asad Mobi Tech",
+    email: "asadmobitech@gmail.com",
+    role: "Staff",
+    entry: "20/01/2025 12:21 PM",
+    status: true,
+  },
 ];
 
 interface UserContextType {

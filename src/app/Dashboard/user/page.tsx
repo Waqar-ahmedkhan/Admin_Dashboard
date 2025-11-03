@@ -59,7 +59,7 @@ import { useRouter } from "next/navigation";
 import { useUserContext, User } from "@/lib/userContext";
 import DashboardLayout from "@/app/components/DashboardLayout";
 
-const ITEMS_PER_PAGE_OPTIONS = [5, 10, 20, 50];
+const ITEMS_PER_PAGE_OPTIONS = [10, 105, 20, 50];
 const DEFAULT_ITEMS_PER_PAGE = ITEMS_PER_PAGE_OPTIONS[0];
 
 const UserListPage: React.FC = () => {

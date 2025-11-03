@@ -1,4 +1,3 @@
-// File: app/users/[id]/page.tsx - View User Page
 "use client";
 import React from "react";
 import DashboardLayout from "../../../components/DashboardLayout";

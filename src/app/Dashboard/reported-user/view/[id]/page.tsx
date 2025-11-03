@@ -38,7 +38,7 @@ import Link from "next/link";
 import { Label } from "@/components/ui/label"; // Use shadcn/ui Label instead of recharts
 
 // Placeholder for DashboardLayout (to be replaced with correct import)
-import DashboardLayout from "../../../components/DashboardLayout"; // Adjust path as needed
+import DashboardLayout from "../../../../components/DashboardLayout"; // Adjust path as needed
 
 interface ReportedUser {
   id: number;
